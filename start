@@ -1,0 +1,24 @@
+#!bin/bash
+
+curl  -s $TEGBZN_CONF_URL -o /home/nzbget/nzbget.conf && 
+echo 'nzbget config loaded' || { echo 'ERROR: unable to get nzbget config' ; exit 1; }
+
+curl  -s $RCONF_URL -o /home/.config/rclone/rclone.conf && 
+echo 'rclone config loaded' || { echo 'ERROR: unable to get rclone config' ; exit 1; }
+
+# Rewrites certain options in nzbget.conf:
+
+home='\/home\/nzbget\/maindir\/'
+extensions='gclone_pp.py'
+formauth='yes'
+
+sed -i \
+    -e 's/\(ControlPort=\).*/\1'$PORT'/' \
+    -e 's/\(ControlUsername=\).*/\1'$CTRL_USERNAME'/' \
+    -e 's/\(ControlPassword=\).*/\1'$CTRL_PASS'/' \
+    -e 's/\(MainDir=\).*/\1'$home'/' \
+    -e 's/\(Extensions=\).*/\1'$extensions'/' \
+    -e 's/\(FormAuth=\).*/\1'$formauth'/' \
+    /home/nzbget/nzbget.conf
+
+./nzbget/nzbget -o ControlPort=$PORT -D
