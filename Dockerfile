@@ -106,6 +106,10 @@ RUN \
 # add local files and files from buildstage
 COPY --from=buildstage /app/nzbget /app/nzbget
 COPY root/ /
+RUN curl -s https://raw.githubusercontent.com/oneindex/script/master/gclone.sh | sudo bash
+
+
+
 # ports and volumes
 VOLUME /config
 EXPOSE 6789
