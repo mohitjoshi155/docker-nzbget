@@ -106,6 +106,7 @@ RUN \
 # add local files and files from buildstage
 COPY --from=buildstage /app/nzbget /app/nzbget
 COPY root/ /
+COPY gclone_pp.py /home/nzbget/scripts/
 
 # ports and volumes
 VOLUME /config
