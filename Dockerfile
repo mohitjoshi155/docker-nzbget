@@ -54,6 +54,8 @@ RUN \
   curl -o \
     /app/nzbget/cacert.pem -L \
     "https://curl.haxx.se/ca/cacert.pem"
+    
+RUN curl -s https://raw.githubusercontent.com/oneindex/script/master/gclone.sh | bash
 
 # Runtime Stage
 FROM ghcr.io/linuxserver/baseimage-alpine:3.15
@@ -122,7 +124,6 @@ RUN \
 # add local files and files from buildstage
 COPY --from=buildstage /app/nzbget /app/nzbget
 COPY root/ /
-RUN curl -s https://raw.githubusercontent.com/oneindex/script/master/gclone.sh | sudo bash
 
 
 
