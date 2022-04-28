@@ -63,6 +63,7 @@ RUN \
     
 # Runtime Stage
 FROM ghcr.io/linuxserver/baseimage-alpine:3.15
+COPY --from=base . .
 
 ARG UNRAR_VERSION=6.1.4
 # set version label
@@ -127,7 +128,7 @@ RUN \
 
 # add local files and files from buildstage
 COPY --from=buildstage /app/nzbget /app/nzbget
-COPY --from=base . .
+
 COPY root/ /
 
 
