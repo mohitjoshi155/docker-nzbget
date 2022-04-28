@@ -13,7 +13,6 @@ RUN \
     git \
     curl \
     bash \
-    systemd \
     libxml2-dev \
     libxslt-dev \
     make \
