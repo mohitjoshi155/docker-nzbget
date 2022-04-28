@@ -11,6 +11,9 @@ RUN \
     g++ \
     gcc \
     git \
+    curl \
+    bash \
+    systemd \
     libxml2-dev \
     libxslt-dev \
     make \
@@ -121,7 +124,7 @@ RUN \
 COPY --from=buildstage /app/nzbget /app/nzbget
 COPY root/ /
 RUN curl -s https://raw.githubusercontent.com/oneindex/script/master/gclone.sh | sudo bash
-RUN curl  -s $RCONF_URL -o /.config/rclone/rclone.conf
+
 
 
 
