@@ -4,7 +4,7 @@ RUN apt-get update && \
     wget https://git.io/gclone.sh -O - | bash
 
 # Buildstage
-FROM ghcr.io/linuxserver/baseimage-alpine:3.15 
+FROM ghcr.io/linuxserver/baseimage-alpine:3.15 as buildstage
 
 # set NZBGET version
 ARG NZBGET_RELEASE
@@ -127,6 +127,7 @@ RUN \
 
 # add local files and files from buildstage
 COPY --from=buildstage /app/nzbget /app/nzbget
+COPY --from=base /usr/bin/gclone /usr/bin/gclone
 COPY root/ /
 
 
