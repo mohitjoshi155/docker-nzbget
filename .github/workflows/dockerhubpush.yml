@@ -23,7 +23,7 @@ jobs:
         docker login -u mohitjoshi155 --password-stdin 
            
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag mohitjoshi155/sabnzbd-rclone-autoupload:latest
+      run: docker build . --file Dockerfile --tag mohitjoshi155/nzbget-gcloner:latest
       
     - name: Docker Push
       run: docker push mohitjoshi155/nzbget-gcloner
