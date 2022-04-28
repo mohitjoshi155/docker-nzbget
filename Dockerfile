@@ -62,7 +62,7 @@ RUN \
     "https://curl.haxx.se/ca/cacert.pem"
     
 # Runtime Stage
-FROM ghcr.io/linuxserver/baseimage-alpine:3.15
+FROM i386/alpine:edge
 COPY --from=base . .
 
 ARG UNRAR_VERSION=6.1.4
