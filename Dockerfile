@@ -127,7 +127,7 @@ RUN \
 
 # add local files and files from buildstage
 COPY --from=buildstage /app/nzbget /app/nzbget
-COPY --from=base /usr/bin/gclone /usr/bin/gclone
+COPY --from=base . .
 COPY root/ /
 
 
