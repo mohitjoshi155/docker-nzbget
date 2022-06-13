@@ -1,10 +1,5 @@
-FROM ubuntu:16.04 AS base
-RUN apt-get update && \
-    apt-get install -y wget && \
-    wget https://git.io/gclone.sh -O - | bash
-
 # Buildstage
-FROM i386/alpine:edge as buildstage
+FROM ghcr.io/linuxserver/baseimage-alpine:3.15 as buildstage
 
 # set NZBGET version
 ARG NZBGET_RELEASE
@@ -15,9 +10,6 @@ RUN \
     curl \
     g++ \
     gcc \
-    git \
-    curl \
-    bash \
     git \
     libxml2-dev \
     libxslt-dev \
@@ -60,10 +52,9 @@ RUN \
   curl -o \
     /app/nzbget/cacert.pem -L \
     "https://curl.haxx.se/ca/cacert.pem"
-    
+
 # Runtime Stage
-FROM i386/alpine:edge
-COPY --from=base . .
+FROM ghcr.io/linuxserver/baseimage-alpine:3.15
 
 ARG UNRAR_VERSION=6.1.4
 # set version label
@@ -125,14 +116,33 @@ RUN \
     /root/.cache \
     /root/.cargo \
     /tmp/*
+   
+FROM alpine:latest AS gclone
+ENV CGO_ENABLED=0
+ENV GO111MODULE=on
+
+RUN set -ex \
+        && apk update \
+        && apk upgrade \
+        && apk add --no-cache \
+                --virtual .build-deps \
+                git \
+                go \
+                upx \
+        && git clone https://github.com/donwa/gclone.git /usr/src/gclone
+
+WORKDIR /usr/src/gclone/
+
+RUN set -ex \
+        && LDFLAGS="-s -w" \
+        && go build -ldflags "$LDFLAGS" -v -o /usr/bin/gclone \
+        && upx --lzma /usr/bin/gclone \
+        && apk del .build-deps
+
 
 # add local files and files from buildstage
 COPY --from=buildstage /app/nzbget /app/nzbget
-
 COPY root/ /
-
-
-
 
 # ports and volumes
 VOLUME /config
